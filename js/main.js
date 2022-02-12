@@ -1,50 +1,54 @@
-class Glass {
-  constructor(id, src, virtualImg, brand, ten, color, price, moTa) {
-    this.id = id;
-    this.src = src;
-    this.virtualImg = virtualImg;
-    this.brand = brand;
-    this.name = ten;
-    this.color = color;
-    this.price = price;
-    this.description = moTa;
-  }
-}
-let GlassShow = new Glass();
+import GlassesSer from "./GlassSer.js";
+import Glass from "./Glass.js";
 
-let layGlass = () => {
-  fetch("https://620274b3b8735d00174cbad6.mockapi.io/Glass")
-    .then((Response) => Response.json())
-    .then((data) => {
-      console.log(data);
-      hienThiGlass(data);
+// let glassShow = new Glass();
+let glassSer = new GlassesSer();
+let glass = new Glass();
+let vglassesList = document.getElementById("vglassesList");
+let hienThiGlass = (mang) => {
+  for (let glass of mang) {
+    let { id, src, virtualImg, brand, ten, color, price, description } = glass;
+    vglassesList.innerHTML += `
+    <button onclick="getGlass('${id}')" class="btn btn-white col-4">              
+        <img class="img-fluid" src="./img/${src}">             
+    </button>`;
+  }
+};
+
+let layDS = () => {
+  glassSer
+    .layDSGlass()
+    .then((result) => {
+      hienThiGlass(result.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+layDS();
+
+let getGlass = (id) => {
+  glassSer
+    .xemGlass(id)
+    .then((result) => {
+      document.querySelector(".vglasses__info").style.display = "block";
+      let { id, src, virtualImg, brand, name, color, price, description } =
+        result.data;
+      document.getElementById(
+        "avatar"
+      ).innerHTML = `<img class="img-fluid" src="./img/${virtualImg}">`;
+
+      document.getElementById("glassesInfo").innerHTML = `
+      <h4> ${name} - ${brand} (${color})</h4> 
+
+        <button class="btn btn-danger mt-2 mr-3">$${price}</button 
+        <p class=" alert-info text text-success">Stocking</p>
+        <p>${description}</p>
+      
+    `;
     })
     .catch((err) => {
       console.log(err);
     });
 };
-layGlass();
-
-
-let vglassesList = document.getElementById("vglassesList");
-let hienThiGlass = (mang) => {
-  for (let glass of mang) {
-    vglassesList.innerHTML += `
-    <button onclick="tryGlass()" class="btn btn-white vglasses__items col-4">              
-        <img class="img-fluid" src="./img/${glass.src}">             
-    </button>`;
-  }
-};
-
-
-// let vglasses__items = document.getElementsByClassName('vglasses__items');
-// for (let i = 0; i < vglasses__items.length; i++){
-//   vglasses__items[i].addEventListener('click', ()=>{
-//     tryGlass(vglasses__items[i]);
-//   })
-// }
-let tryGlass = (i)=>{
-  console.log("click ok");
-  
-}
-
+window.getGlass = getGlass;

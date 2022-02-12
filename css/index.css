@@ -34,8 +34,8 @@ body{
 
 .vglasses__model img{
     position: absolute;
-    bottom: -247px;
-    left: 75%;
+    left: 119px;
+    top: 212px;
     width: 238px;
     height: 85px;
     opacity: 0.9;
@@ -56,9 +56,16 @@ body{
     width: 100%;
     color: white;
     padding: 20px;
+    color:#28a745;
    display: none;
 }
 
 #glasses{
     transition: all 0.5s;
+}
+h4,p{
+    color: #fff;
+}
+p{
+    font-size: 16px;
 }
